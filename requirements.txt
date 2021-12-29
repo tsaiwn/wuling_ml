@@ -1,0 +1,7 @@
+# 機器學習模組
+torch
+torchvision
+torchsummary
+
+# 畫圖模組
+matplotlib
