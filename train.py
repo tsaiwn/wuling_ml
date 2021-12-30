@@ -117,7 +117,7 @@ optimizer = torch.optim.Adam(model.parameters(), lr=LR)
 
 # 3.3 開始訓練
 for epoch in range(1, n_epochs + 1):
-    print(f'\trunning epoch: {epoch}')
+    print(f'\t開始第 {epoch} 次訓練：')
 
     # 暫存當次訓練損失值
     train_loss = 0.0
@@ -178,7 +178,7 @@ for epoch in range(1, n_epochs + 1):
     if valid_loss < valid_loss_min:
         print('\tValidation loss decreased:')
         print(f'\t\t{valid_loss_min:.6f} -> {valid_loss:.6f}.')
-        print('\tSaving model ...')
+        print('\t儲存模型...')
         torch.save(model.state_dict(), model_file)
         valid_loss_min = valid_loss
 
