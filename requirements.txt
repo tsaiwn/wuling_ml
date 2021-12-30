@@ -5,3 +5,6 @@ torchsummary
 
 # 畫圖模組
 matplotlib
+
+# 進度條模組
+tqdm

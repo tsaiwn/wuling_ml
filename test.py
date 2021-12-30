@@ -5,14 +5,15 @@ import torch
 
 from torch.utils.data import DataLoader
 from torchvision import datasets, transforms
+from tqdm import tqdm
 
 # 設定使用的模型及儲存的名字
-from model import CNN_Model as Model, model_file
+from model import CnnModel as Model, model_file
 
 # 設定檔案路徑
 test_path = pathlib.Path("test")
 # 設定每批丟入多少張圖片
-batch_size = 32
+BATCH_SIZE = 32
 
 # 1. 讀取圖片
 print("1. 讀取圖片")
@@ -28,7 +29,7 @@ test_data = datasets.ImageFolder(test_path, transform=image_transforms)
 print("\t模型分類分式，測試資料：", test_data.class_to_idx)
 
 # 1.3 設定圖片載入器，讓後面的模型測試可以批次執行
-test_loader = DataLoader(test_data, batch_size=batch_size, shuffle=True)
+test_loader = DataLoader(test_data, batch_size=BATCH_SIZE, shuffle=True)
 
 # 2. 載入模型
 print("2. 載入模型")
@@ -63,8 +64,7 @@ test_total = 0.  # 記錄總數
 
 # 將模型切換至預測模式
 model.eval()
-for batch_idx, (data, target) in enumerate(test_loader):
-    print(f'\t\t測試中...第 {batch_idx} 批次')
+for batch_idx, (data, target) in enumerate(tqdm(test_loader, ncols=92, desc=f'\t測試進度')):
     # 若可以使用 GPU，則使用 GPU
     if train_on_gpu:
         data, target = data.cuda(), target.cuda()

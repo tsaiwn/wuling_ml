@@ -6,24 +6,28 @@ import torch
 from torch.utils.data import DataLoader
 from torchvision import datasets, transforms
 from torchsummary import summary
+from tqdm import tqdm
 
 # 設定使用的模型及儲存的名字
-from model import CNN_Model as Model, model_file
+from model import CnnModel as Model, model_file
 
-
-# 設定檔案路徑
-train_path = pathlib.Path("train")
-valid_path = pathlib.Path("validation")
 # 設定每批丟入多少張圖片
-batch_size = 32
+BATCH_SIZE = 32
 # 設定學習率
-LR = 0.01
+LEARNING_RATE = 0.001
 # 設定模型訓練次數
-n_epochs = 1
+EPOCHS = 2
 
 # 設定是否預覽圖片
 preview_image = False
 preview_model = False
+
+# 設定是否強制載入已存在的模型
+force_load_exist_model = True
+
+# 設定檔案路徑
+train_path = pathlib.Path("train")
+valid_path = pathlib.Path("validation")
 
 # 1. 讀取圖片
 print("1. 讀取圖片")
@@ -41,8 +45,8 @@ print("\t模型分類分式，訓練資料：", train_data.class_to_idx)
 print("\t模型分類分式，驗證資料：", valid_data.class_to_idx)
 
 # 1.3 設定圖片載入器，讓後面的模型訓練可以批次執行
-train_loader = DataLoader(train_data, batch_size=batch_size, shuffle=True)
-valid_loader = DataLoader(valid_data, batch_size=batch_size, shuffle=True)
+train_loader = DataLoader(train_data, batch_size=BATCH_SIZE, shuffle=True)
+valid_loader = DataLoader(valid_data, batch_size=BATCH_SIZE, shuffle=True)
 
 # 1.4 預覽圖片
 if preview_image:
@@ -80,12 +84,15 @@ if not train_on_gpu:
 else:
     print("\t支援 CUDA! 使用 GPU 進行訓練...")
 
-# 2.2 建立訓練模型
+# 2.2 建立模型
 model = Model()
 
 # 2.3 檢查是否有已存在的模型，進行載入
 if pathlib.Path(model_file).is_file():
-    if 'Y' in input('\t發現已存在的模型，是否載入？(y/n)').upper():
+    if force_load_exist_model:
+        print('\t發現已存在的模型，載入中...')
+        model.load_state_dict(torch.load(model_file))
+    elif 'Y' in input('\t發現已存在的模型，是否載入？(y/n)').upper():
         print('\t載入模型...')
         model.load_state_dict(torch.load(model_file))
     else:
@@ -110,15 +117,14 @@ else:
 # 3.2 設定訓練所需資料
 # 損失(loss)初始值 = 無限大，目標是儘可能小
 valid_loss_min = np.Inf
-# 評斷(criterion)函數，判斷預測結果與實際值的接近程度
+# 設定評斷(criterion)函數，判斷預測結果與實際值的接近程度
 criterion = torch.nn.CrossEntropyLoss()
-# 優化(optimizer)函數，用以調整模型的參數
-optimizer = torch.optim.Adam(model.parameters(), lr=LR)
+# 設定優化(optimizer)函數，用以調整模型的參數
+optimizer = torch.optim.Adam(model.parameters(), lr=LEARNING_RATE)
 
 # 3.3 開始訓練
-for epoch in range(1, n_epochs + 1):
-    print(f'\t開始第 {epoch} 次訓練：')
-
+print(f'\t預計總訓練次數: {EPOCHS}')
+for epoch in range(1, EPOCHS + 1):
     # 暫存當次訓練損失值
     train_loss = 0.0
     valid_loss = 0.0
@@ -128,8 +134,8 @@ for epoch in range(1, n_epochs + 1):
     model.train()
 
     # 從圖片載入器取得圖片進行訓練
-    for batch_idx, (data, target) in enumerate(train_loader):
-        print(f'\t\t訓練中...第 {batch_idx} 批次')
+    for batch_idx, (data, target) in enumerate(tqdm(train_loader, ncols=92, desc=f'\t第{epoch}次訓練')):
+        # print(f'\t\t訓練中...第 {batch_idx} 批次')
         # 若可以使用 GPU，則使用 GPU
         if train_on_gpu:
             data, target = data.cuda(), target.cuda()
@@ -152,8 +158,7 @@ for epoch in range(1, n_epochs + 1):
     # 3.3.2 驗證階段
     # 將模型切換至預測模式
     model.eval()
-    for batch_idx, (data, target) in enumerate(valid_loader):
-        print(f'\t\t驗証中...第 {batch_idx} 批次')
+    for batch_idx, (data, target) in enumerate(tqdm(valid_loader, ncols=92, desc=f'\t第{epoch}次驗証')):
         # 若可以使用 GPU，則使用 GPU
         if train_on_gpu:
             data, target = data.cuda(), target.cuda()

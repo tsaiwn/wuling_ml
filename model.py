@@ -4,10 +4,10 @@ import torch
 model_file = 'model_CNN.pth'
 
 
-class CNN_Model(torch.nn.Module):
+class CnnModel(torch.nn.Module):
     def __init__(self):
         # 定義模型所需演算法
-        super(CNN_Model, self).__init__()
+        super(CnnModel, self).__init__()
 
         # Convolution 1
         # input_shape = (3, 224, 224)
