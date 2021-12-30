@@ -92,9 +92,19 @@
 
 ## 參考資料
 1. https://www.kaggle.com/c/dogs-vs-cats-redux-kernels-edition/data
-1. https://pytorch.org/docs/stable/index.html
-2. https://docs.microsoft.com/zh-tw/windows/ai/windows-ml/tutorials/pytorch-train-model
-3. https://github.com/pytorch/serve/tree/master/examples
-4. https://github.com/vdumoulin/conv_arithmetic
-5. https://medium.com/jimmyfu87/cnn%E5%AF%A6%E4%BD%9Ckaggle%E8%B2%93%E7%8B%97%E5%BD%B1%E5%83%8F%E8%BE%A8%E8%AD%98-pytorch-26380b357a3d
-6. https://hackmd.io/@lido2370/S1aX6e1nN?type=view
+2. https://pytorch.org/docs/stable/index.html
+3. https://docs.microsoft.com/zh-tw/windows/ai/windows-ml/tutorials/pytorch-train-model
+5. https://github.com/pytorch/serve/tree/master/examples
+6. https://github.com/vdumoulin/conv_arithmetic
+7. https://medium.com/jimmyfu87/cnn%E5%AF%A6%E4%BD%9Ckaggle%E8%B2%93%E7%8B%97%E5%BD%B1%E5%83%8F%E8%BE%A8%E8%AD%98-pytorch-26380b357a3d
+8. https://hackmd.io/@lido2370/S1aX6e1nN?type=view
+9. https://pypi.org/project/tqdm/
+
+## Other
+
+- MacOS 遇到 `ModuleNotFoundError: No module named '_tkinter'`
+
+	```shell
+	brew install python-tk
+	```
+
