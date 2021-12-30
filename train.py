@@ -16,18 +16,21 @@ BATCH_SIZE = 32
 # 設定學習率
 LEARNING_RATE = 0.001
 # 設定模型訓練次數
-EPOCHS = 2
+EPOCHS = 50
 
 # 設定是否預覽圖片
 preview_image = False
 preview_model = False
 
-# 設定是否強制載入已存在的模型
-force_load_exist_model = True
-
 # 設定檔案路徑
 train_path = pathlib.Path("train")
 valid_path = pathlib.Path("validation")
+
+# 設定是否強制載入已存在的模型
+force_load_exist_model = True
+
+# 損失(loss)初始值 = 無限大，目標是儘可能小
+valid_loss_min = np.Inf
 
 # 1. 讀取圖片
 print("1. 讀取圖片")
@@ -88,13 +91,17 @@ else:
 model = Model()
 
 # 2.3 檢查是否有已存在的模型，進行載入
-if pathlib.Path(model_file).is_file():
+if pathlib.Path(model_file).is_file() and pathlib.Path(model_file + '.loss').is_file():
     if force_load_exist_model:
         print('\t發現已存在的模型，載入中...')
         model.load_state_dict(torch.load(model_file))
+        with open(model_file + '.loss', 'r') as f:
+            valid_loss_min = int(f.read())
     elif 'Y' in input('\t發現已存在的模型，是否載入？(y/n)').upper():
         print('\t載入模型...')
         model.load_state_dict(torch.load(model_file))
+        with open(model_file + '.loss', 'r') as f:
+            valid_loss_min = int(f.read())
     else:
         print('\t重新訓練新模型...')
 
@@ -115,8 +122,6 @@ else:
     model.cpu()
 
 # 3.2 設定訓練所需資料
-# 損失(loss)初始值 = 無限大，目標是儘可能小
-valid_loss_min = np.Inf
 # 設定評斷(criterion)函數，判斷預測結果與實際值的接近程度
 criterion = torch.nn.CrossEntropyLoss()
 # 設定優化(optimizer)函數，用以調整模型的參數
@@ -186,5 +191,7 @@ for epoch in range(1, EPOCHS + 1):
         print('\t儲存模型...')
         torch.save(model.state_dict(), model_file)
         valid_loss_min = valid_loss
+        with open(model_file + '.loss', 'w') as f:
+            f.write(str(valid_loss_min))
 
 print("訓練結束...")
