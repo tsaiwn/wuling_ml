@@ -52,17 +52,23 @@ else:
     exit()
 
 # 3. 測試模型
-print("4. 測試模型")
+print("3. 測試模型")
 
+# 3.1 設定模型使用資源，CPU or GPU
+if train_on_gpu:
+    model.cuda()
+else:
+    model.cpu()
+
+# 3.2 宣告變數
 # 設定評斷(criterion)函數，判斷預測結果與實際值的接近程度
 criterion = torch.nn.CrossEntropyLoss()
-
-# 宣告變數，暫存測試結果
+# 暫存測試結果
 test_loss = 0.  # 記錄總損失率
 test_correct = 0.  # 記錄正確數
 test_total = 0.  # 記錄總數
 
-# 將模型切換至預測模式
+# 3.3 將模型切換至預測模式，進行預測
 model.eval()
 for batch_idx, (data, target) in enumerate(tqdm(test_loader, ncols=92, desc=f'\t測試進度')):
     # 若可以使用 GPU，則使用 GPU
