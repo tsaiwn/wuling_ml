@@ -52,15 +52,10 @@ class CnnModel(torch.nn.Module):
 
         # Fully connected 1
         # input_shape = (8 * 50 * 50)
-        # ouput_shape = (512)
-        # ref: https://reurl.cc/8W4VXd
-        self.fc1 = torch.nn.Linear(8 * 50 * 50, 512)
-        self.relu5 = torch.nn.ReLU()
-
-        # Fully connected 2
-        # input_shape = (512)
         # ouput_shape = (2)
-        self.fc2 = torch.nn.Linear(512, 2)
+        # ref: https://reurl.cc/8W4VXd
+        self.fc1 = torch.nn.Linear(8 * 50 * 50, 2)
+
 
     def forward(self, x):
         # 定義模型每一步的執行方式
@@ -76,6 +71,5 @@ class CnnModel(torch.nn.Module):
         out = out.view(out.size(0), -1)
 
         out = self.fc1(out)
-        out = self.fc2(out)
 
         return out
