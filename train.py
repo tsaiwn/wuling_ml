@@ -14,7 +14,7 @@ from model import CnnModel as Model, model_file
 # 設定每批丟入多少張圖片
 BATCH_SIZE = 32
 # 設定學習率
-LEARNING_RATE = 0.001
+LEARNING_RATE = 0.0001
 # 設定模型訓練次數
 EPOCHS = 50
 
@@ -31,6 +31,12 @@ force_load_exist_model = True
 
 # 損失(loss)初始值 = 無限大，目標是儘可能小
 valid_loss_min = np.Inf
+
+# 讀取電腦是否支援 GPU 運算
+train_on_gpu = torch.cuda.is_available()
+
+# 若電腦支援 GPU 運算，所要使用的 GPU
+cuda_device = torch.device()
 
 # 1. 讀取圖片
 print("1. 讀取圖片")
@@ -81,7 +87,6 @@ if preview_image:
 print("2. 建立模型")
 
 # 2.1 檢查是否支援使用 GPU 訓練
-train_on_gpu = torch.cuda.is_available()
 if not train_on_gpu:
     print("\t未支援 CUDA, 使用 CPU 進行訓練...")
 else:
@@ -96,7 +101,7 @@ if pathlib.Path(model_file).is_file() and pathlib.Path(model_file + '.loss').is_
         print('\t發現已存在的模型，載入中...')
         model.load_state_dict(torch.load(model_file))
         with open(model_file + '.loss', 'r') as f:
-            valid_loss_min = int(f.read())
+            valid_loss_min = float(f.read())
     elif 'Y' in input('\t發現已存在的模型，是否載入？(y/n)').upper():
         print('\t載入模型...')
         model.load_state_dict(torch.load(model_file))
@@ -117,7 +122,7 @@ print("3. 訓練模型")
 
 # 3.1 設定模型使用資源，CPU or GPU
 if train_on_gpu:
-    model.cuda()
+    model.cuda(cuda_device)
 else:
     model.cpu()
 
@@ -143,7 +148,7 @@ for epoch in range(1, EPOCHS + 1):
         # print(f'\t\t訓練中...第 {batch_idx} 批次')
         # 若可以使用 GPU，則使用 GPU
         if train_on_gpu:
-            data, target = data.cuda(), target.cuda()
+            data, target = data.cuda(cuda_device), target.cuda(cuda_device)
         # 重設優化函數的梯度值
         optimizer.zero_grad()
 
@@ -166,7 +171,7 @@ for epoch in range(1, EPOCHS + 1):
     for batch_idx, (data, target) in enumerate(tqdm(valid_loader, ncols=92, desc=f'\t第{epoch}次驗証')):
         # 若可以使用 GPU，則使用 GPU
         if train_on_gpu:
-            data, target = data.cuda(), target.cuda()
+            data, target = data.cuda(cuda_device), target.cuda(cuda_device)
 
         # 正向傳遞階段(forward pass):
         # 計算預測結果

@@ -15,6 +15,12 @@ test_path = pathlib.Path("test")
 # 設定每批丟入多少張圖片
 BATCH_SIZE = 32
 
+# 讀取電腦是否支援 GPU 運算
+train_on_gpu = torch.cuda.is_available()
+
+# 若電腦支援 GPU 運算，所要使用的 GPU
+cuda_device = torch.device('cuda')
+
 # 1. 讀取圖片
 print("1. 讀取圖片")
 
@@ -38,7 +44,6 @@ print("2. 載入模型")
 model = Model()
 
 # 2.2 檢查是否支援使用 GPU 訓練
-train_on_gpu = torch.cuda.is_available()
 if not train_on_gpu:
     print("\t未支援 CUDA, 使用 CPU 進行測試...")
 else:
@@ -56,7 +61,7 @@ print("3. 測試模型")
 
 # 3.1 設定模型使用資源，CPU or GPU
 if train_on_gpu:
-    model.cuda()
+    model.to(cuda_device)
 else:
     model.cpu()
 
@@ -73,7 +78,7 @@ model.eval()
 for batch_idx, (data, target) in enumerate(tqdm(test_loader, ncols=92, desc=f'\t測試進度')):
     # 若可以使用 GPU，則使用 GPU
     if train_on_gpu:
-        data, target = data.cuda(), target.cuda()
+        data, target = data.to(cuda_device), target.cuda(cuda_device)
 
     # 正向傳遞階段(forward pass):
     # 計算預測結果
