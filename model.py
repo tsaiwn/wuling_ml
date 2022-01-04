@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import torch
 
 # 設定儲存模型檔案名字

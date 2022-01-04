@@ -108,3 +108,8 @@
 	brew install python-tk
 	```
 
+- 更新 pip
+
+    ```shell
+    python -m pip install --upgrade pip
+    ```
