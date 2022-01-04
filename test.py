@@ -12,7 +12,7 @@ from tqdm import tqdm
 from model import CnnModel as Model, model_file
 
 # 設定檔案路徑
-test_path = pathlib.Path("test")
+test_path = pathlib.Path("datas/test")
 # 設定每批丟入多少張圖片
 BATCH_SIZE = 32
 
