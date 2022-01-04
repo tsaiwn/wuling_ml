@@ -1,10 +1,10 @@
-# 機器學習模組
+# Machine Learning Module
 torch
 torchvision
 torchsummary
 
-# 畫圖模組
+# Plot Module
 matplotlib
 
-# 進度條模組
+# Progress bar Module
 tqdm
