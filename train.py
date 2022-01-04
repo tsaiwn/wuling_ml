@@ -23,8 +23,8 @@ preview_image = False
 preview_model = False
 
 # 設定檔案路徑
-train_path = pathlib.Path("train")
-valid_path = pathlib.Path("validation")
+train_path = pathlib.Path("datas/train")
+#valid_path = pathlib.Path("validation")
 
 # 設定是否強制載入已存在的模型
 force_load_exist_model = True
@@ -36,7 +36,7 @@ valid_loss_min = np.Inf
 train_on_gpu = torch.cuda.is_available()
 
 # 若電腦支援 GPU 運算，所要使用的 GPU
-cuda_device = torch.device()
+cuda_device = torch.device('cuda')
 
 # 1. 讀取圖片
 print("1. 讀取圖片")
@@ -49,9 +49,12 @@ image_transforms = transforms.Compose([
 
 # 1.2 從資料夾讀取圖片檔
 train_data = datasets.ImageFolder(train_path, transform=image_transforms)
-valid_data = datasets.ImageFolder(valid_path, transform=image_transforms)
+#valid_data = datasets.ImageFolder(valid_path, transform=image_transforms)
 print("\t模型分類分式，訓練資料：", train_data.class_to_idx)
-print("\t模型分類分式，驗證資料：", valid_data.class_to_idx)
+#print("\t模型分類分式，驗證資料：", valid_data.class_to_idx)
+train_size = int(0.8 * len(train_data))
+valid_size = len(train_data) - train_size
+train_data, valid_data = torch.utils.data.random_split(train_data, [train_size, valid_size])
 
 # 1.3 設定圖片載入器，讓後面的模型訓練可以批次執行
 train_loader = DataLoader(train_data, batch_size=BATCH_SIZE, shuffle=True)
