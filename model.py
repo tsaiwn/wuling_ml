@@ -12,7 +12,7 @@ class CnnModel(torch.nn.Module):
 
         # Convolution 1
         # input_shape = (3, 224, 224)
-        # (weigh - kernel + 1) / stride = ( 224 - 5 + 1) / 1 = 220
+        # (height - kernel + 1) / stride = ( 224 - 5 + 1) / 1 = 220
         # output_shape = (16, 220, 220)
         # ref: https://reurl.cc/Y97oqO
         # ref: https://github.com/vdumoulin/conv_arithmetic
@@ -36,7 +36,7 @@ class CnnModel(torch.nn.Module):
 
         # Convolution 2
         # input_shape = (16, 110, 110)
-        # (weigh - kernel + 1) / stride = ( 110 - 11 + 1) / 1 = 100
+        # (height - kernel + 1) / stride = ( 110 - 11 + 1) / 1 = 100
         # output_shape = (8, 100, 100)
         self.cnn2 = torch.nn.Conv2d(
             in_channels=16,
@@ -47,7 +47,7 @@ class CnnModel(torch.nn.Module):
         )
         self.relu2 = torch.nn.ReLU()
         # Max pool 2
-        # weight / kernel = 100 / 2 = 50
+        # height / kernel = 100 / 2 = 50
         # output_shape = (8, 50, 50)
         self.maxpool2 = torch.nn.MaxPool2d(kernel_size=2)
 
