@@ -88,8 +88,11 @@
 
 - `test.py`
     此檔案提供了訓練完的模型進行測試。
-    
 
+## 使用已訓練模型
+
+`pretrained_model` 中包含已使用 12500 張貓狗圖片訓練了 50 次的模型。
+可將其複制至根目錄進行測試，準確率應為 81%。
 
 ## 參考資料
 1. https://www.kaggle.com/c/dogs-vs-cats-redux-kernels-edition/data
