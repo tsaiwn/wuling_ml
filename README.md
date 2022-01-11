@@ -4,7 +4,7 @@
 本專案供武陵高中 110 學年度上學期所開設的 ***交大愛物 AI 課程*** 教學使用。專案內容為使用 pytorch 以 CNN 模型進行簡易的貓狗分類，其圖片來源使用了 [Kaggle](https://www.kaggle.com/c/dogs-vs-cats-redux-kernels-edition/data) 上所提供的貓狗資料集。
 由於為了教學使用，只從中取其貓狗各 1000 筆做訓練(training)使用、各 500 筆做驗証(validation)及各 500 筆做測試(testing)。(感謝顏泰翔博士Ksoy提供)
 
-###本專案請以 **python3.7** 以上版本執行。
+### 本專案請以 **python3.7** 以上版本執行。
 
 ### 因為 data 目錄內貓狗圖片兩萬多張若從 GitHub 下載總共有六百多MB, <br/>建議改到 https://goo.GL/6jtP41/ 點 00_50 進入後點 Day6 抓裡面的 .zip 檔案只有約75MB含程式碼和測試圖片。
 
