@@ -6,5 +6,5 @@ torchsummary
 # Plot Module
 matplotlib
 
-# Progress bar Module
+# Progress bar Module 
 tqdm
