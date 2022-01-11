@@ -6,7 +6,7 @@
 
 ###本專案請以 **python3.7** 以上版本執行。
 
-### 因為 data 目錄內貓狗圖片兩萬多張若從 GitHub 下載總共有六百多MB, \n建議改到 https://goo.GL/6jtP41/ 點 00_50 進入後點 Day6 抓裡面的 .zip 檔案只有約75MB含程式碼和測試圖片。
+### 因為 data 目錄內貓狗圖片兩萬多張若從 GitHub 下載總共有六百多MB, <br/>建議改到 https://goo.GL/6jtP41/ 點 00_50 進入後點 Day6 抓裡面的 .zip 檔案只有約75MB含程式碼和測試圖片。
 
 ## 安裝步驟
 所需相關的套件已列在 `requirements.txt` 中，
